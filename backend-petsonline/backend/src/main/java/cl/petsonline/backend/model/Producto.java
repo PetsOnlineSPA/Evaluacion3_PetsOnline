@@ -18,12 +18,12 @@ public class Producto {
     private String nombre;
 
     @NotBlank(message = "La categoría es obligatoria")
-    private String categoria; // Ej: "Alimento", "Juguetes", "Accesorios"
+    private String categoria;
 
     @Positive(message = "El precio debe ser mayor a 0")
     private int precio;
 
     private int stock;
 
-    private String imagenUrl; // Para guardar la URL de la foto
+    private String imagenUrl;
 }

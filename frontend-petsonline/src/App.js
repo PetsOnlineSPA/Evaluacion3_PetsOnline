@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 import ContactoPage from './pages/ContactoPage';
 import LandingPage from './pages/LandingPage';
 import ServiciosPage from './pages/ServiciosPage';
-import CarritoPage from './pages/CarritoPage'; // <--- IMPORTANTE
+import CarritoPage from './pages/CarritoPage'; 
 
 function App() {
   

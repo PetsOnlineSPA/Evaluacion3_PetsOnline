@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "usuarios")
-public class Usuario implements UserDetails { // <--- CAMBIO IMPORTANTE
+public class Usuario implements UserDetails { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,17 +37,15 @@ public class Usuario implements UserDetails { // <--- CAMBIO IMPORTANTE
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Mascota> mascotas;
 
-    // --- MÉTODOS DE USERDETAILS (SEGURIDAD) ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Convierte tu Rol (ROLE_ADMIN) en una autoridad que Spring entienda
         return List.of(new SimpleGrantedAuthority(rol.name()));
     }
 
     @Override
     public String getUsername() {
-        return email; // Usaremos el EMAIL para loguearnos, no un "username"
+        return email; 
     }
 
     @Override

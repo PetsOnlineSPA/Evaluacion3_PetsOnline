@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react'; // <--- Importamos useContext
+import React, { useState, useContext } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
-import { AuthContext } from '../context/AuthContext'; // <--- Importamos el Contexto
+import { AuthContext } from '../context/AuthContext'; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // <--- Sacamos la función login del contexto
+  const { login } = useContext(AuthContext); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,7 +20,6 @@ const LoginPage = () => {
         password: password
       });
 
-      // Usamos la función del contexto para guardar el token y actualizar el estado global
       login(response.data.token);
       
       setMensaje('¡Login Exitoso! Redirigiendo...');
@@ -35,7 +34,6 @@ const LoginPage = () => {
     }
   };
 
-  // ... El resto del return (HTML) queda igual ...
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">

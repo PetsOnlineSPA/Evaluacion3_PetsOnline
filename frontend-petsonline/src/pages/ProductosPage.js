@@ -51,7 +51,6 @@ const ProductosPage = () => {
                     </div>
                 ) : (
                     productosFiltrados.map((prod) => (
-                        // AQUÍ ESTÁ LA MAGIA RESPONSIVA:
                         <div className="col-12 col-md-6 col-lg-3 mb-4" key={prod.id}>
                             <div className="card h-100 shadow-sm border-0">
                                 <img 
@@ -59,8 +58,7 @@ const ProductosPage = () => {
                                     className="card-img-top p-3" 
                                     alt={prod.nombre} 
                                     style={{ height: '200px', objectFit: 'contain' }}
-                                    // AQUÍ LA CORRECCIÓN DE IMAGEN ROTA:
-                                    onError={(e) => { e.target.src = 'https://cdn-icons-png.flaticon.com/512/1089/1089420.png'; }}
+                                    onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=Producto'; }}
                                 />
                                 <div className="card-body d-flex flex-column">
                                     <h5 className="card-title text-center">{prod.nombre}</h5>

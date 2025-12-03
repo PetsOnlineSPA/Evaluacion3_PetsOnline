@@ -18,7 +18,7 @@ public class Mascota {
     private String nombre;
 
     @NotBlank(message = "La especie es obligatoria")
-    private String especie; // Perro, Gato, etc.
+    private String especie;
 
     @NotBlank(message = "La raza es obligatoria")
     private String raza;
@@ -26,9 +26,8 @@ public class Mascota {
     private int edad;
     private double peso;
 
-    // Relación: Muchas mascotas pertenecen a un Usuario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    @JsonIgnore // Importante: Evita un bucle infinito al convertir a JSON
+    @JsonIgnore 
     private Usuario usuario;
 }

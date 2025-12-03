@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api/axiosConfig'; // Usamos axios directo o crea un servicio si prefieres
+import api from '../api/axiosConfig'; 
 
 const ServiciosPage = () => {
     const [servicios, setServicios] = useState([]);
@@ -15,7 +15,13 @@ const ServiciosPage = () => {
                 {servicios.map(serv => (
                     <div className="col-md-4 mb-4" key={serv.id}>
                         <div className="card h-100 shadow border-0">
-                            <img src={serv.imagenUrl} className="card-img-top" alt={serv.nombre} style={{height: '200px', objectFit: 'cover'}} />
+                            <img 
+                                src={serv.imagenUrl} 
+                                className="card-img-top" 
+                                alt={serv.nombre} 
+                                style={{ height: '200px', objectFit: 'cover' }}
+                                onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=Servicio'; }}
+                                />
                             <div className="card-body">
                                 <h4 className="card-title fw-bold">{serv.nombre}</h4>
                                 <p className="card-text text-muted">{serv.descripcion}</p>

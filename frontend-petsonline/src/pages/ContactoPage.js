@@ -8,7 +8,6 @@ const ContactoPage = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        // Limpiar error al escribir
         if (errores[name]) {
             setErrores({ ...errores, [name]: '' });
         }
@@ -32,7 +31,6 @@ const ContactoPage = () => {
         e.preventDefault();
         if (validar()) {
             setEnviado(true);
-            // Aquí conectarías con el backend si fuera necesario
             setTimeout(() => {
                 setEnviado(false);
                 setFormData({ nombre: '', email: '', mensaje: '' });

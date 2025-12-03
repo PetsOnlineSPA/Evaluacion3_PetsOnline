@@ -23,21 +23,17 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
-        // Creamos el usuario
         var user = new Usuario();
         user.setNombre(request.getNombre());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // ¡Password encriptada!
-        user.setRol(request.getRol() != null ? request.getRol() : Rol.ROLE_USER); // Por defecto USER
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRol(request.getRol() != null ? request.getRol() : Rol.ROLE_USER);
 
-        // Guardamos en BD
         usuarioRepository.save(user);
 
-        // --- AGREGAMOS EL ROL AL TOKEN ---
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("rol", user.getRol().name());
         
-        // Generamos el token con los datos extra
         var jwtToken = jwtService.generateToken(extraClaims, user);
         
         return AuthResponse.builder()
@@ -46,7 +42,6 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Autenticamos
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
@@ -54,15 +49,12 @@ public class AuthService {
             )
         );
 
-        // Buscamos al usuario
         var user = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-        // --- AGREGAMOS EL ROL AL TOKEN ---
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("rol", user.getRol().name());
 
-        // Generamos token con datos extra
         var jwtToken = jwtService.generateToken(extraClaims, user);
 
         return AuthResponse.builder()

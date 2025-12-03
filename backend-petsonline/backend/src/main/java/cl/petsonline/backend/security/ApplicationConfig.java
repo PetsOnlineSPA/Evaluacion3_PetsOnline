@@ -27,10 +27,8 @@ public class ApplicationConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        // CAMBIO: Pasamos el userDetailsService() DIRECTAMENTE dentro del paréntesis
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
         
-        // Esta línea la mantenemos igual
         authProvider.setPasswordEncoder(passwordEncoder());
         
         return authProvider;

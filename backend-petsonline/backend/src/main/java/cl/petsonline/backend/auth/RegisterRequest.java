@@ -14,5 +14,5 @@ public class RegisterRequest {
     private String nombre;
     private String email;
     private String password;
-    private Rol rol; // Para elegir si es ADMIN o USER
+    private Rol rol; 
 }

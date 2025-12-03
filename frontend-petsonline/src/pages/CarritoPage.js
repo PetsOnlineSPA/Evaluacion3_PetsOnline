@@ -6,7 +6,6 @@ const CarritoPage = () => {
     const { carrito } = useContext(CartContext);
     const navigate = useNavigate();
 
-    // Sumar el total
     const total = carrito.reduce((sum, item) => sum + item.precio, 0);
 
     return (

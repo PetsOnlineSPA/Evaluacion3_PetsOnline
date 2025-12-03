@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// Importamos los contextos
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 

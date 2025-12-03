@@ -17,19 +17,16 @@ public class MascotaController {
 
     private final MascotaService mascotaService;
 
-    // GET: Traer mis mascotas
     @GetMapping
     public ResponseEntity<List<Mascota>> listarMisMascotas(Principal principal) {
         return ResponseEntity.ok(mascotaService.obtenerMisMascotas(principal.getName()));
     }
 
-    // POST: Crear nueva mascota
     @PostMapping
     public ResponseEntity<Mascota> crearMascota(@RequestBody Mascota mascota, Principal principal) {
         return ResponseEntity.ok(mascotaService.guardarMascota(mascota, principal.getName()));
     }
 
-    // DELETE: Borrar mascota (Solo ADMIN)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
     public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
@@ -37,7 +34,6 @@ public class MascotaController {
         return ResponseEntity.noContent().build();
     }
     
-    // GET: Una sola mascota
     @GetMapping("/{id}")
     public ResponseEntity<Mascota> obtenerPorId(@PathVariable Long id) {
         Mascota mascota = mascotaService.obtenerPorId(id);
@@ -47,7 +43,6 @@ public class MascotaController {
         return ResponseEntity.notFound().build();
     }
     
-    // PUT: Editar mascota
     @PutMapping("/{id}")
     public ResponseEntity<Mascota> actualizarMascota(@PathVariable Long id, @RequestBody Mascota mascotaActualizada, Principal principal) {
         Mascota mascotaExistente = mascotaService.obtenerPorId(id);

@@ -39,7 +39,6 @@ const MascotaFormPage = () => {
             } else {
                 await createMascota(mascota);
             }
-            // CORRECCIÓN: Redirigir a la lista de mascotas, no al Home
             navigate('/mis-mascotas'); 
         } catch (error) {
             alert("Error al guardar la mascota");

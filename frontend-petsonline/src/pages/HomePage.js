@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMascotas, deleteMascota } from '../api/mascotaService';
-import { jwtDecode } from "jwt-decode"; // Asegúrate de haber instalado: npm install jwt-decode
+import { jwtDecode } from "jwt-decode"; 
 
 const HomePage = () => {
     const [mascotas, setMascotas] = useState([]);
@@ -18,8 +18,6 @@ const HomePage = () => {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                // Revisamos si el rol en el token es ADMIN
-                // Ajusta 'rol' o 'role' según cómo venga en tu token (puedes verlo en la consola)
                 if (decoded.rol === 'ROLE_ADMIN' || decoded.role === 'ROLE_ADMIN' || decoded.authorities?.includes('ROLE_ADMIN')) {
                     setEsAdmin(true);
                 }
@@ -42,7 +40,7 @@ const HomePage = () => {
         if (window.confirm('¿Seguro que quieres eliminar esta mascota?')) {
             try {
                 await deleteMascota(id);
-                cargarMascotas(); // Recargamos la lista
+                cargarMascotas(); 
             } catch (error) {
                 alert("Error: No tienes permiso para eliminar.");
             }
