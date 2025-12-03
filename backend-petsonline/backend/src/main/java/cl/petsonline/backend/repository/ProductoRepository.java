@@ -1,0 +1,10 @@
+package cl.petsonline.backend.repository;
+
+import cl.petsonline.backend.model.Producto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface ProductoRepository extends JpaRepository<Producto, Long> {
+    // Método para filtrar por categoría (como en tu tarea anterior)
+    List<Producto> findByCategoria(String categoria);
+}

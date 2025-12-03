@@ -29,12 +29,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <--- ¡AQUÍ ACTIVAMOS CORS!
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .authorizeHttpRequests(auth -> auth
+                // Rutas Públicas (Login, Registro, H2, Swagger)
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                
+                // NUEVO: Permitir que CUALQUIERA vea los productos (GET)
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/productos/**").permitAll()
+                
+                // El resto (Crear productos, ver mascotas, etc.) requiere estar logueado
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

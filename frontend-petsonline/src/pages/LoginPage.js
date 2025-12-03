@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <--- IMPORTANTE: Para navegar
+import React, { useState, useContext } from 'react'; // <--- Importamos useContext
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
+import { AuthContext } from '../context/AuthContext'; // <--- Importamos el Contexto
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
-  const navigate = useNavigate(); // <--- Hook de navegación
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // <--- Sacamos la función login del contexto
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,12 +20,11 @@ const LoginPage = () => {
         password: password
       });
 
-      const token = response.data.token;
-      localStorage.setItem('token', token);
+      // Usamos la función del contexto para guardar el token y actualizar el estado global
+      login(response.data.token);
       
       setMensaje('¡Login Exitoso! Redirigiendo...');
       
-      // <--- AQUÍ ESTÁ LA MAGIA: Esperamos 1 seg y nos vamos al Home
       setTimeout(() => {
         navigate('/home');
       }, 1000);
@@ -34,6 +35,7 @@ const LoginPage = () => {
     }
   };
 
+  // ... El resto del return (HTML) queda igual ...
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
