@@ -3,6 +3,7 @@ package cl.petsonline.backend.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod; // <--- OJO: Importar esto
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,15 +33,16 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .authorizeHttpRequests(auth -> auth
-                // Rutas Públicas (Login, Registro, H2, Swagger)
+                // 1. Accesos Públicos de Infraestructura
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 
-                // NUEVO: Permitir que CUALQUIERA vea los productos (GET)
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/productos/**").permitAll()
+                // 2. Accesos Públicos de Lectura (Para que la Tienda y Servicios se vean siempre)
+                .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/servicios/**").permitAll()
                 
-                // El resto (Crear productos, ver mascotas, etc.) requiere estar logueado
+                // 3. Todo lo demás requiere Token (Crear, Borrar, Ver Mascotas privadas)
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -52,11 +54,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Definimos las reglas de CORS para permitir React
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Solo dejamos entrar a React
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

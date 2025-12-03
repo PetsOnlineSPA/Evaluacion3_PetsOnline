@@ -5,9 +5,8 @@ import { CartContext } from '../context/CartContext';
 const ProductosPage = () => {
     const [productos, setProductos] = useState([]);
     const [filtro, setFiltro] = useState('Todos');
-    const { agregarAlCarrito } = useContext(CartContext); // Para sumar al carrito
+    const { agregarAlCarrito } = useContext(CartContext);
 
-    // Cargar productos del Backend al iniciar
     useEffect(() => {
         cargarProductos();
     }, []);
@@ -21,19 +20,17 @@ const ProductosPage = () => {
         }
     };
 
-    // Lógica de filtrado
     const productosFiltrados = filtro === 'Todos' 
         ? productos 
         : productos.filter(p => p.categoria === filtro);
 
-    // Obtener categorías únicas dinámicamente
     const categorias = ['Todos', ...new Set(productos.map(p => p.categoria))];
 
     return (
         <div className="container">
             <h2 className="text-center mb-4 text-primary">Tienda de Productos 🦴</h2>
 
-            {/* Botones de Filtro */}
+            {/* Filtros Responsivos */}
             <div className="d-flex justify-content-center gap-2 mb-4 flex-wrap">
                 {categorias.map(cat => (
                     <button 
@@ -46,33 +43,36 @@ const ProductosPage = () => {
                 ))}
             </div>
 
-            {/* Grilla de Productos */}
+            {/* Grilla Responsiva */}
             <div className="row">
                 {productosFiltrados.length === 0 ? (
                     <div className="alert alert-info text-center">
-                        No hay productos cargados. (Créalos en Swagger o pide al Admin)
+                        No hay productos cargados.
                     </div>
                 ) : (
                     productosFiltrados.map((prod) => (
-                        <div className="col-md-4 col-lg-3 mb-4" key={prod.id}>
+                        // AQUÍ ESTÁ LA MAGIA RESPONSIVA:
+                        <div className="col-12 col-md-6 col-lg-3 mb-4" key={prod.id}>
                             <div className="card h-100 shadow-sm border-0">
                                 <img 
-                                    src={prod.imagenUrl || "https://via.placeholder.com/300?text=Producto"} 
+                                    src={prod.imagenUrl} 
                                     className="card-img-top p-3" 
                                     alt={prod.nombre} 
                                     style={{ height: '200px', objectFit: 'contain' }}
+                                    // AQUÍ LA CORRECCIÓN DE IMAGEN ROTA:
+                                    onError={(e) => { e.target.src = 'https://cdn-icons-png.flaticon.com/512/1089/1089420.png'; }}
                                 />
                                 <div className="card-body d-flex flex-column">
-                                    <h5 className="card-title">{prod.nombre}</h5>
-                                    <p className="text-muted small mb-2">{prod.categoria}</p>
-                                    <h4 className="text-success fw-bold">${prod.precio}</h4>
+                                    <h5 className="card-title text-center">{prod.nombre}</h5>
+                                    <p className="text-muted small mb-2 text-center">{prod.categoria}</p>
+                                    <h4 className="text-success fw-bold text-center">${prod.precio}</h4>
                                     
                                     <div className="mt-auto">
                                         <button 
-                                            className="btn btn-warning w-100 fw-bold"
+                                            className="btn btn-warning w-100 fw-bold shadow-sm"
                                             onClick={() => agregarAlCarrito(prod)}
                                         >
-                                            + Agregar
+                                            + Agregar al Carrito
                                         </button>
                                     </div>
                                 </div>

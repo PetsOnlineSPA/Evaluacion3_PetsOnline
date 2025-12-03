@@ -9,7 +9,7 @@ const MascotaFormPage = () => {
     const [edad, setEdad] = useState('');
     const [peso, setPeso] = useState('');
     const navigate = useNavigate();
-    const { id } = useParams(); // Si hay ID, estamos editando
+    const { id } = useParams();
 
     useEffect(() => {
         if (id) {
@@ -39,7 +39,8 @@ const MascotaFormPage = () => {
             } else {
                 await createMascota(mascota);
             }
-            navigate('/home'); // Volver al listado
+            // CORRECCIÓN: Redirigir a la lista de mascotas, no al Home
+            navigate('/mis-mascotas'); 
         } catch (error) {
             alert("Error al guardar la mascota");
         }
@@ -76,7 +77,7 @@ const MascotaFormPage = () => {
                             </div>
                         </div>
                         <button type="submit" className="btn btn-success me-2">Guardar</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => navigate('/home')}>Cancelar</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => navigate('/mis-mascotas')}>Cancelar</button>
                     </form>
                 </div>
             </div>
