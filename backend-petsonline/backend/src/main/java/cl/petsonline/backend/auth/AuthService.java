@@ -10,6 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -30,8 +33,12 @@ public class AuthService {
         // Guardamos en BD
         usuarioRepository.save(user);
 
-        // Generamos el token
-        var jwtToken = jwtService.generateToken(user);
+        // --- AGREGAMOS EL ROL AL TOKEN ---
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("rol", user.getRol().name());
+        
+        // Generamos el token con los datos extra
+        var jwtToken = jwtService.generateToken(extraClaims, user);
         
         return AuthResponse.builder()
                 .token(jwtToken)
@@ -39,7 +46,7 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Autenticamos (Spring Security hace el trabajo sucio aquí)
+        // Autenticamos
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
@@ -47,12 +54,16 @@ public class AuthService {
             )
         );
 
-        // Si llegamos aquí, el usuario y contraseña son correctos. Buscamos al usuario.
+        // Buscamos al usuario
         var user = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-        // Generamos token
-        var jwtToken = jwtService.generateToken(user);
+        // --- AGREGAMOS EL ROL AL TOKEN ---
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("rol", user.getRol().name());
+
+        // Generamos token con datos extra
+        var jwtToken = jwtService.generateToken(extraClaims, user);
 
         return AuthResponse.builder()
                 .token(jwtToken)

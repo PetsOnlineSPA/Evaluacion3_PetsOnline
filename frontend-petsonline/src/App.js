@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import MascotaFormPage from './pages/MascotaFormPage'; // <--- IMPORTAR
+import MascotaFormPage from './pages/MascotaFormPage'; // Importamos el formulario
 
 function App() {
   
+  // Protección: Si no hay token, te manda al login
   const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -29,11 +30,10 @@ function App() {
             <ProtectedRoute><MascotaFormPage /></ProtectedRoute>
         } />
 
-        {/* Ruta para Editar (recibe ID) */}
+        {/* Ruta para Editar (recibe el ID) */}
         <Route path="/mascotas/edit/:id" element={
             <ProtectedRoute><MascotaFormPage /></ProtectedRoute>
         } />
-
       </Routes>
     </Router>
   );

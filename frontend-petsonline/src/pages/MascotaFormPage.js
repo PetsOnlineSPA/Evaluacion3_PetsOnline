@@ -9,7 +9,7 @@ const MascotaFormPage = () => {
     const [edad, setEdad] = useState('');
     const [peso, setPeso] = useState('');
     const navigate = useNavigate();
-    const { id } = useParams(); // Para saber si estamos editando
+    const { id } = useParams(); // Si hay ID, estamos editando
 
     useEffect(() => {
         if (id) {
@@ -26,7 +26,7 @@ const MascotaFormPage = () => {
             setEdad(data.edad);
             setPeso(data.peso);
         } catch (error) {
-            console.error("Error al cargar mascota", error);
+            console.error("Error al cargar datos", error);
         }
     };
 
@@ -41,14 +41,13 @@ const MascotaFormPage = () => {
             }
             navigate('/home'); // Volver al listado
         } catch (error) {
-            console.error("Error al guardar", error);
             alert("Error al guardar la mascota");
         }
     };
 
     return (
         <div className="container mt-5">
-            <div className="card shadow">
+            <div className="card shadow col-md-8 mx-auto">
                 <div className="card-header bg-dark text-white">
                     <h4>{id ? 'Editar Mascota' : 'Nueva Mascota'}</h4>
                 </div>
@@ -59,8 +58,8 @@ const MascotaFormPage = () => {
                             <input type="text" className="form-control" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Especie (Perro, Gato...)</label>
-                            <input type="text" className="form-control" value={especie} onChange={(e) => setEspecie(e.target.value)} required />
+                            <label className="form-label">Especie</label>
+                            <input type="text" className="form-control" value={especie} onChange={(e) => setEspecie(e.target.value)} placeholder="Ej: Perro, Gato" required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Raza</label>
@@ -73,7 +72,7 @@ const MascotaFormPage = () => {
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label className="form-label">Peso (kg)</label>
-                                <input type="number" className="form-control" value={peso} onChange={(e) => setPeso(e.target.value)} required />
+                                <input type="number" step="0.1" className="form-control" value={peso} onChange={(e) => setPeso(e.target.value)} required />
                             </div>
                         </div>
                         <button type="submit" className="btn btn-success me-2">Guardar</button>

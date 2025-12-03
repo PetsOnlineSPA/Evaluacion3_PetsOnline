@@ -4,6 +4,7 @@ import cl.petsonline.backend.model.Mascota;
 import cl.petsonline.backend.service.MascotaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,7 +20,6 @@ public class MascotaController {
     // GET: Traer mis mascotas
     @GetMapping
     public ResponseEntity<List<Mascota>> listarMisMascotas(Principal principal) {
-        // 'principal.getName()' nos da el email del usuario logueado gracias al Token
         return ResponseEntity.ok(mascotaService.obtenerMisMascotas(principal.getName()));
     }
 
@@ -29,14 +29,15 @@ public class MascotaController {
         return ResponseEntity.ok(mascotaService.guardarMascota(mascota, principal.getName()));
     }
 
-    // DELETE: Borrar mascota
+    // DELETE: Borrar mascota (Solo ADMIN)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')") 
     public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
         mascotaService.eliminarMascota(id);
         return ResponseEntity.noContent().build();
     }
     
-    // GET: Una sola mascota (para editar)
+    // GET: Una sola mascota
     @GetMapping("/{id}")
     public ResponseEntity<Mascota> obtenerPorId(@PathVariable Long id) {
         Mascota mascota = mascotaService.obtenerPorId(id);
@@ -56,7 +57,7 @@ public class MascotaController {
             mascotaExistente.setRaza(mascotaActualizada.getRaza());
             mascotaExistente.setEdad(mascotaActualizada.getEdad());
             mascotaExistente.setPeso(mascotaActualizada.getPeso());
-            // Guardamos usando el mismo método (mantiene el usuario)
+            
             return ResponseEntity.ok(mascotaService.guardarMascota(mascotaExistente, principal.getName()));
         }
         return ResponseEntity.notFound().build();
