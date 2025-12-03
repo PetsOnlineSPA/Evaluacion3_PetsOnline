@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
-import api from '../api/axiosConfig'; // Usamos la configuración que hicimos antes
+import { useNavigate } from 'react-router-dom'; // <--- IMPORTANTE: Para navegar
+import api from '../api/axiosConfig';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const navigate = useNavigate(); // <--- Hook de navegación
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setMensaje('Conectando con el servidor...');
 
     try {
-      // Enviamos el usuario y contraseña al Backend
       const response = await api.post('/auth/login', {
         email: email,
         password: password
       });
 
-      // Si funciona, guardamos el token en el navegador
       const token = response.data.token;
       localStorage.setItem('token', token);
       
-      setMensaje('¡Login Exitoso! Token guardado.');
-      console.log("Token recibido:", token);
+      setMensaje('¡Login Exitoso! Redirigiendo...');
       
-      // Aquí más adelante te enviaremos a la página principal
+      // <--- AQUÍ ESTÁ LA MAGIA: Esperamos 1 seg y nos vamos al Home
+      setTimeout(() => {
+        navigate('/home');
+      }, 1000);
+
     } catch (error) {
       console.error(error);
       setMensaje('Error: Credenciales incorrectas o servidor apagado.');
@@ -49,7 +52,6 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required 
-                    placeholder="ejemplo@correo.com"
                   />
                 </div>
                 <div className="mb-3">

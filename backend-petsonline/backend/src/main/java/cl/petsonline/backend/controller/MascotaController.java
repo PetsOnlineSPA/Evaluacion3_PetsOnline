@@ -1,0 +1,64 @@
+package cl.petsonline.backend.controller;
+
+import cl.petsonline.backend.model.Mascota;
+import cl.petsonline.backend.service.MascotaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/mascotas")
+@RequiredArgsConstructor
+public class MascotaController {
+
+    private final MascotaService mascotaService;
+
+    // GET: Traer mis mascotas
+    @GetMapping
+    public ResponseEntity<List<Mascota>> listarMisMascotas(Principal principal) {
+        // 'principal.getName()' nos da el email del usuario logueado gracias al Token
+        return ResponseEntity.ok(mascotaService.obtenerMisMascotas(principal.getName()));
+    }
+
+    // POST: Crear nueva mascota
+    @PostMapping
+    public ResponseEntity<Mascota> crearMascota(@RequestBody Mascota mascota, Principal principal) {
+        return ResponseEntity.ok(mascotaService.guardarMascota(mascota, principal.getName()));
+    }
+
+    // DELETE: Borrar mascota
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarMascota(@PathVariable Long id) {
+        mascotaService.eliminarMascota(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    // GET: Una sola mascota (para editar)
+    @GetMapping("/{id}")
+    public ResponseEntity<Mascota> obtenerPorId(@PathVariable Long id) {
+        Mascota mascota = mascotaService.obtenerPorId(id);
+        if (mascota != null) {
+            return ResponseEntity.ok(mascota);
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    // PUT: Editar mascota
+    @PutMapping("/{id}")
+    public ResponseEntity<Mascota> actualizarMascota(@PathVariable Long id, @RequestBody Mascota mascotaActualizada, Principal principal) {
+        Mascota mascotaExistente = mascotaService.obtenerPorId(id);
+        if (mascotaExistente != null) {
+            mascotaExistente.setNombre(mascotaActualizada.getNombre());
+            mascotaExistente.setEspecie(mascotaActualizada.getEspecie());
+            mascotaExistente.setRaza(mascotaActualizada.getRaza());
+            mascotaExistente.setEdad(mascotaActualizada.getEdad());
+            mascotaExistente.setPeso(mascotaActualizada.getPeso());
+            // Guardamos usando el mismo método (mantiene el usuario)
+            return ResponseEntity.ok(mascotaService.guardarMascota(mascotaExistente, principal.getName()));
+        }
+        return ResponseEntity.notFound().build();
+    }
+}
